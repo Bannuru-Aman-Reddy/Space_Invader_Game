@@ -1,8 +1,6 @@
 from random import randint
 from turtle import Turtle
-BOOSTER1_POSITION = (20, -275)
-BOOSTER2_POSITION = (-20, -275)
-SHOOTER_POSITION = (0, -255)
+SHUTTLE_POSITIONS = [(-20, -275), (0, -275), (0, -255), (20, -275)]
 
 
 def stars():
@@ -42,21 +40,22 @@ class Shuttle:
         self.bullets = []
         self.space_invader()
         self.bullet_gen_cor = -200
+        self.bullet_move_speed = 5
         create_line()
 
     def space_invader(self):
-        self.create_shuttle()
-        self.create_booster(BOOSTER1_POSITION)
-        self.create_booster(BOOSTER2_POSITION)
-        self.create_shooter((0, -255))
+        self.create_booster(SHUTTLE_POSITIONS[0])
+        self.create_shuttle(SHUTTLE_POSITIONS[1])
+        self.create_shooter(SHUTTLE_POSITIONS[2])
+        self.create_booster(SHUTTLE_POSITIONS[3])
         self.new_bullet()
 
-    def create_shuttle(self):
+    def create_shuttle(self, pos):
         shuttle = Turtle("circle")
         shuttle.color("white")
         shuttle.penup()
         shuttle.shapesize(1.5)
-        shuttle.goto(0, -275)
+        shuttle.goto(pos)
         self.shuttle.append(shuttle)
 
     def create_booster(self, pos):
@@ -92,12 +91,12 @@ class Shuttle:
         new_bullet.shapesize(stretch_wid=0.5)
         new_bullet.penup()
         new_bullet.color("white")
-        new_bullet.goto(self.shuttle[0].xcor(), self.shuttle[0].ycor()+23)
+        new_bullet.goto(self.shuttle[1].xcor(), self.shuttle[1].ycor()+23)
         self.bullets.append(new_bullet)
 
     def move_bullets(self):
         for bullet in self.bullets:
-            new_ycor = bullet.ycor() + 5
+            new_ycor = bullet.ycor() + self.bullet_move_speed
             bullet.goto(bullet.xcor(), new_ycor)
 
     def remove_bullets(self):
@@ -105,3 +104,18 @@ class Shuttle:
             if bullet.ycor() > 330:
                 bullet.hideturtle()
                 self.bullets.remove(bullet)
+
+    def sb_stop(self):
+        for bullet in self.bullets:
+            bullet.goto(bullet.xcor(), bullet.ycor())
+
+    def clear_sbc(self):
+        for i in self.bullets:
+            i.goto(1000, 1000)
+
+    def sb_reset(self):
+        self.clear_sbc()
+        self.bullets.clear()
+        for i in range(0, 4):
+            self.shuttle[i].goto(SHUTTLE_POSITIONS[i])
+

@@ -11,13 +11,16 @@ class Scoreboard(Turtle):
         self.xcor = -220
         self.ycor = -300
         self.score = 0
+        self.high_score = 0
         self.color("white")
         self.penup()
         self.hideturtle()
         self.create_lives()
         self.update_scoreboard()
-        with open("high_score.txt", "r") as high_score:
-            self.high_score = high_score.read()
+
+    def read_high_score(self):
+        with open("high_score.txt", "r") as hs:
+            self.high_score = hs.read()
 
     def create_lives(self):
         for i in range(0, 81, 20):
@@ -38,8 +41,8 @@ class Scoreboard(Turtle):
         self.write(fr"LEVEL={self.level}", align="center", font=FONT)
 
     def game_over(self):
-        self.goto(0, 25)
-        self.write("GAME OVER!!", align="center", font=FONT)
+        self.goto(0, 50)
+        self.write("GAME OVER!!", align="center", font=("Times New Roman", 20, "bold"))
         self.goto(0, 0)
         self.write(fr"YOUR SCORE: {self.score}", align="center", font=FONT)
         self.goto(0, -25)
@@ -49,3 +52,4 @@ class Scoreboard(Turtle):
             self.write(fr"HIGH SCORE: {self.high_score}", align="center", font=FONT)
         else:
             self.write(fr"HIGH SCORE: {self.high_score}", align="center", font=FONT)
+        self.read_high_score()
